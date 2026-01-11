@@ -42,28 +42,49 @@
         <ul>
           <li>Raspberry Pi 5</li>
           <li>Pi-hole (DNS Adblocker)</li>
-          <li>ISC DHCP Server</li>
+          <li>Pi-hole DHCP Server</li>
           <li>Raspbian OS</li>
         </ul>
 
         <hr class="major" />
 
         <h2>Implementation Details</h2>
-        <p>Describe your implementation process here. What challenges did you face? How did you overcome them? What did you learn?</p>
+        <p>
+          This project focused on configuring a Raspberry Pi 5 to act as a centralized DNS adblocker and local DNS server
+          using Pi-hole. The goal was to improve network security, reduce unwanted traffic, and gain hands-on experience
+          with Linux-based network services.
+        </p>
 
         <h3>Setup Process</h3>
-        <p>Detail the steps you took to set up the Pi-hole and DHCP server...</p>
+        <ul>
+          <li>Installed Raspberry Pi OS Lite to reduce system overhead and improve performance.</li>
+          <li>Updated system packages and verified stable network connectivity.</li>
+          <li>Assigned a static IP address to ensure consistent DNS availability.</li>
+          <li>Installed Pi-hole using the official installation script.</li>
+          <li>Enabled the Pi-hole web admin interface for centralized monitoring and management.</li>
+        </ul>
 
         <h3>Configuration</h3>
-        <p>Explain your network configuration, any custom blocklists, DHCP range settings, etc...</p>
+        <ul>
+          <li>Configured Pi-hole as the primary DNS server at the router level.</li>
+          <li>Selected upstream DNS providers for external name resolution.</li>
+          <li>Applied default and custom blocklists to block ads, trackers, and malicious domains.</li>
+          <li>Created local DNS records to resolve internal hostnames.</li>
+          <li>Enabled logging and monitoring to analyze DNS queries and blocked requests.</li>
+          <li>Secured the admin interface with authentication and access restrictions.</li>
+        </ul>
 
         <h3>Results</h3>
-        <p>Share the results - how much ad traffic is blocked? How has it improved your network experience?</p>
+        <ul>
+          <li>Successfully blocked ads and trackers across all connected devices at the DNS level.</li>
+          <li>Improved network performance by reducing unnecessary external requests.</li>
+          <li>Enhanced visibility into network traffic through DNS query logging.</li>
+          <li>Achieved stable, low-latency DNS resolution with continuous uptime.</li>
+        </ul>
 
-        <hr class="major" />
 
         <h2>Future Improvements</h2>
-        <p>What would you add or change if you revisited this project?</p>
+        <p>I eventually want to turn this Raspberry Pi into a full WiFi router, and also host a minecraft server</p>
 
         <ul class="actions">
           <li><a href="index.html" class="button big">Back to Portfolio</a></li>
