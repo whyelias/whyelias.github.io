@@ -19,9 +19,10 @@
             <header id="header">
                 <a href="index.html" class="logo"><strong>Back to Portfolio</strong></a>
                 <ul class="icons">
-                    <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-                    <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-                    <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="https://www.linkedin.com/in/eliastovar/" class="icon brands fa-linkedin"><span class="label">Twitter</span></a></li>
+                    <li><a href="https://github.com/whyelias" class="icon brands fa-github"><span class="label">Facebook</span></a></li>
+                    <li><a href="https://www.youtube.com/@gravpickle1921" class="icon brands fa-youtube"><span class="label">Snapchat</span></a></li>
+                    <li><a href="https://www.instagram.com/why_eliast/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
                 </ul>
             </header>
 
@@ -31,7 +32,7 @@
                     <h1>Active Directory Home Lab</h1>
                 </header>
 
-                <span class="image main"><img src="images/pic01.jpg" alt="" /></span>
+                <span class="image main"><img src="images/pic02.jpg" alt="" /></span>
 
                 <h2>Project Overview</h2>
                 <p>Configured two Windows Server 2019 machines, one physical server and one virtual machine, to run Active Directory to host machines and users. This project combines Active Directory, Windows system configuration, and network administration</p>
@@ -41,50 +42,118 @@
                 <h2>Technologies Used</h2>
                 <ul>
                     <li>BMAX Mini PC - Windows Server 2019</li>
-                    <li>Pi-hole (DNS Adblocker)</li>
-                    <li>Pi-hole DHCP Server</li>
-                    <li>Raspbian OS</li>
+                    <li>VirtualBox VM - Windows Server 2019</li>
+                    <li>VirtualBox VM - Windows 10 Pro</li>
+                    <li>Mac Mini - Ubuntu 24.02 LTS</li>
                 </ul>
 
                 <hr class="major" />
 
+                <!-- Implementation Details Section - Replace the existing section in active-directory-lab.html -->
+
                 <h2>Implementation Details</h2>
                 <p>
-                    This project focused on configuring a Raspberry Pi 5 to act as a centralized DNS adblocker and local DNS server
-                    using Pi-hole. The goal was to improve network security, reduce unwanted traffic, and gain hands-on experience
-                    with Linux-based network services.
+                    This project involved building two separate Active Directory environments to gain hands-on experience
+                    with enterprise network administration and Windows Server infrastructure. The first implementation was
+                    a fully configured virtual lab using VirtualBox with NAT routing and DHCP services. The second was a
+                    physical homelab using dedicated hardware to manage real devices on my network.
                 </p>
 
-                <h3>Setup Process</h3>
+                <h3>Virtual Machine Setup (VirtualBox)</h3>
+                <p>
+                    The virtual environment simulated a complete enterprise network with a domain controller providing
+                    Active Directory, routing, and DHCP services to client machines.
+                </p>
+
+                <h4>Initial Server Configuration</h4>
                 <ul>
-                    <li>Installed Raspberry Pi OS Lite to reduce system overhead and improve performance.</li>
-                    <li>Updated system packages and verified stable network connectivity.</li>
-                    <li>Assigned a static IP address to ensure consistent DNS availability.</li>
-                    <li>Installed Pi-hole using the official installation script.</li>
-                    <li>Enabled the Pi-hole web admin interface for centralized monitoring and management.</li>
+                    <li>Installed Windows Server 2019 on a VirtualBox virtual machine.</li>
+                    <li>Renamed the server to "DC" (Domain Controller) for clarity.</li>
+                    <li>Configured dual network adapters: one for external internet connectivity and one for the internal network.</li>
+                    <li>Set up the internal NIC with a static IP address (172.16.0.1/24) and configured DNS to point to loopback (127.0.0.1).</li>
                 </ul>
 
-                <h3>Configuration</h3>
+                <h4>Active Directory Domain Services</h4>
                 <ul>
-                    <li>Configured Pi-hole as the primary DNS server at the router level.</li>
-                    <li>Selected upstream DNS providers for external name resolution.</li>
-                    <li>Applied default and custom blocklists to block ads, trackers, and malicious domains.</li>
-                    <li>Created local DNS records to resolve internal hostnames.</li>
-                    <li>Enabled logging and monitoring to analyze DNS queries and blocked requests.</li>
-                    <li>Secured the admin interface with authentication and access restrictions.</li>
+                    <li>Installed Active Directory Domain Services through Server Manager.</li>
+                    <li>Promoted the server to a domain controller and created a new forest.</li>
+                    <li>Created an Organizational Unit named "_ ADMINS" for administrative accounts.</li>
+                    <li>Generated a dedicated domain administrator account and added it to the Domain Admins security group.</li>
+                    <li>Verified administrative access by logging in with the new credentials.</li>
+                </ul>
+
+                <h4>Routing and Remote Access (RAS/NAT)</h4>
+                <ul>
+                    <li>Installed the Remote Access role with routing capabilities.</li>
+                    <li>Configured Network Address Translation (NAT) to allow internal network clients to access the internet through the domain controller.</li>
+                    <li>Designated the external NIC as the public interface for internet connectivity.</li>
+                    <li>Enabled routing between the internal and external networks.</li>
+                </ul>
+
+                <h4>DHCP Server Configuration</h4>
+                <ul>
+                    <li>Installed the DHCP Server role through Server Manager.</li>
+                    <li>Created a new DHCP scope with an IP address range of 172.16.0.100 to 172.16.0.200.</li>
+                    <li>Configured the domain controller's IP address (172.16.0.1) as the default gateway for DHCP clients.</li>
+                    <li>Set DNS server options to point to the domain controller for name resolution.</li>
+                    <li>Authorized the DHCP server in Active Directory.</li>
+                </ul>
+
+                <h4>Bulk User Creation</h4>
+                <ul>
+                    <li>Created an Organizational Unit named "_ EMPLOYEES" to organize user accounts.</li>
+                    <li>Developed a PowerShell script to automate the creation of 10,000 test users with randomly generated names.</li>
+                    <li>Configured all user accounts with a standard password and set passwords to never expire for lab purposes.</li>
+                    <li>Verified user account creation through Active Directory Users and Computers.</li>
+                </ul>
+
+                <h4>Client Machine Setup</h4>
+                <ul>
+                    <li>Created a Windows 10 Pro virtual machine to act as a domain-joined client.</li>
+                    <li>Configured the VM to use the internal network adapter only.</li>
+                    <li>Verified that the client received an IP address automatically from the DHCP server.</li>
+                    <li>Successfully joined the Windows 10 machine to the domain.</li>
+                    <li>Tested user authentication by logging in with domain user credentials.</li>
+                </ul>
+
+                <h3>Physical Homelab Setup</h3>
+                <p>
+                    The physical implementation focused on core Active Directory functionality using real hardware to
+                    manage devices on my home network.
+                </p>
+
+                <h4>Hardware Configuration</h4>
+                <ul>
+                    <li>Deployed Windows Server 2019 on a BMAX Mini PC as the domain controller.</li>
+                    <li>Configured a Mac Mini running Ubuntu 24.02 LTS as a client device.</li>
+                    <li>Connected both machines to the existing network infrastructure without dual NICs.</li>
+                    <li>Assigned static IP addressing to the domain controller for reliable DNS services.</li>
+                </ul>
+
+                <h4>Active Directory Setup</h4>
+                <ul>
+                    <li>Installed Active Directory Domain Services on the BMAX Mini PC.</li>
+                    <li>Created a new domain and promoted the server to domain controller.</li>
+                    <li>Manually created administrative and standard user accounts without automation scripts.</li>
+                    <li>Organized users into appropriate Organizational Units for better management.</li>
+                    <li>Configured Group Policy settings for basic security and management policies.</li>
                 </ul>
 
                 <h3>Results</h3>
                 <ul>
-                    <li>Successfully blocked ads and trackers across all connected devices at the DNS level.</li>
-                    <li>Improved network performance by reducing unnecessary external requests.</li>
-                    <li>Enhanced visibility into network traffic through DNS query logging.</li>
-                    <li>Achieved stable, low-latency DNS resolution with continuous uptime.</li>
+                    <li>Successfully deployed two functional Active Directory environments with different architectures.</li>
+                    <li>Gained practical experience with Windows Server administration, networking, and automation.</li>
+                    <li>Demonstrated understanding of enterprise identity management and network services.</li>
+                    <li>Created a scalable test environment for experimenting with Group Policy, user management, and domain services.</li>
+                    <li>Achieved stable domain controller operation supporting multiple client devices.</li>
                 </ul>
 
-
                 <h2>Future Improvements</h2>
-                <p>I eventually want to turn this Raspberry Pi into a full WiFi router, and also host a minecraft server</p>
+                <ul>
+                    <li>Automate user account creation and management.</li>
+                    <li>Configure Group Policy settings for additional security and management policies.</li>
+                    <li>Add the ML machine to the domain and configure users to be able to access and use it</li>
+                </ul>
 
                 <ul class="actions">
                     <li><a href="index.html" class="button big">Back to Portfolio</a></li>
@@ -119,8 +188,8 @@
                     <h2>Get in touch</h2>
                 </header>
                 <ul class="contact">
-                    <li class="icon solid fa-envelope"><a href="#">your.email@example.com</a></li>
-                    <li class="icon solid fa-phone">(000) 000-0000</li>
+                    <li class="icon solid fa-envelope"><a href="mailto::elias@tovarfamily.org">elias@tovarfamily.org</a></li>
+                    <li class="icon solid fa-phone">512-517-1775</li>
                 </ul>
             </section>
 
