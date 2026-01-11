@@ -1,10 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Self-hosted Machine Learning Model - Elias Tovar</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="index.html" class="logo"><strong>Back to Portfolio</strong></a>
+                <ul class="icons">
+                    <li><a href="https://www.linkedin.com/in/eliastovar/" class="icon brands fa-linkedin"><span class="label">Twitter</span></a></li>
+                    <li><a href="https://github.com/whyelias" class="icon brands fa-github"><span class="label">Facebook</span></a></li>
+                    <li><a href="https://www.youtube.com/@gravpickle1921" class="icon brands fa-youtube"><span class="label">Snapchat</span></a></li>
+                    <li><a href="https://www.instagram.com/why_eliast/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                </ul>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <header class="main">
+                    <h1>Self-hosted Machine Learning Model</h1>
+                </header>
+
+                <span class="image main"><img src="images/pic02.jpg" alt="" /></span>
+
+                <h2>Project Overview</h2>
+                <p>
+                    This project focuses on deploying and running a modern large language model (LLM)
+                    entirely on local hardware. The goal was to gain hands-on experience with GPU-accelerated
+                    machine learning, model inference, and system-level configuration while avoiding reliance
+                    on cloud-based AI services.
+                </p>
+                <p>
+                    The system was configured to support experimentation with open-source language models
+                    and serves as the foundation for future work involving low-level machine learning
+                    development in C.
+                </p>
+
+
+                <hr class="major" />
+
+                <h2>Technologies Used</h2>
+                <ul>
+                    <li>Ubuntu 24.04 LTS (Desktop)</li>
+                    <li>NVIDIA GeForce RTX 3060 (12GB VRAM)</li>
+                    <li>AMD Ryzen 12-core / 24-thread CPU</li>
+                    <li>32GB DDR4 RAM</li>
+                    <li>500GB NVMe (OS)</li>
+                    <li>1TB NVMe (ML data & models)</li>
+                    <li>PyTorch</li>
+                    <li>Hugging Face Transformers</li>
+                    <li>Miniconda</li>
+                    <li>CUDA Toolkit</li>
+                </ul>
+
+                <hr class="major" />
+
+                <!-- Implementation Details Section - Replace the existing section in active-directory-lab.html -->
+
+                <h2>Implementation Details</h2>
+                <p>
+                    This environment was built on Ubuntu with a dual-NVMe storage layout to separate the operating system from machine learning data and model artifacts. GPU acceleration was enabled using an NVIDIA RTX 3060 with CUDA-supported PyTorch to ensure efficient local inference. A dedicated Conda environment was created to isolate machine learning dependencies and maintain reproducibility. Modern transformer-based language models were deployed using quantization techniques to operate within consumer-grade GPU memory constraints while maintaining stable inference performance.
+                </p>
+
+                <h3>System and Storage Configuration</h3>
+                <p>
+                    Ubuntu Desktop was selected to simplify GPU driver installation, CUDA support,
+                    and debugging during development. A dual-NVMe setup was used to separate the
+                    operating system from machine learning data.
+                </p>
+                <ul>
+                    <li>500GB NVMe dedicated to the operating system and development tools</li>
+                    <li>1TB NVMe wiped, formatted, and mounted at <code>/mnt/ml-data</code></li>
+                    <li>Dedicated storage used for models, datasets, and inference outputs</li>
+                </ul>
+
+
+                <h3>GPU Acceleration</h3>
+                <p>
+                    The NVIDIA RTX 3060 GPU was configured with proprietary drivers and CUDA support
+                    to enable hardware-accelerated inference. PyTorch was installed with CUDA bindings
+                    and verified to correctly detect and utilize the GPU.
+                </p>
+                <ul>
+                    <li>Installed NVIDIA drivers compatible with CUDA</li>
+                    <li>Installed PyTorch with CUDA support</li>
+                    <li>Verified GPU availability using PyTorch device checks</li>
+                </ul>
+
+
+                <h3>Environment Management</h3>
+                <p>
+                    A dedicated Conda environment was created to isolate machine learning dependencies
+                    from the base system. This approach allows for controlled experimentation and
+                    version management.
+                </p>
+                <ul>
+                    <li>Miniconda installed on the base system</li>
+                    <li>Dedicated <code>llm</code> Conda environment created using Python 3.10</li>
+                    <li>Installed PyTorch, Transformers, and related ML libraries</li>
+                </ul>
+
+
+                <h3>Model Inference</h3>
+                <p>
+                    The Mistral 7B language model was selected due to its strong performance and
+                    compatibility with consumer-grade GPUs when using quantization.
+                </p>
+                <ul>
+                    <li>Loaded the model using 4-bit quantization to reduce VRAM usage</li>
+                    <li>Configured inference parameters to allow long-form text generation</li>
+                    <li>Verified stable generation performance on local hardware</li>
+                </ul>
+                <p>
+                    This setup enables interactive experimentation with language models without
+                    external dependencies.
+                </p>
+
+
+                <h2>Results</h2>
+                <ul>
+                    <li>Successfully deployed a modern LLM entirely on local hardware</li>
+                    <li>Achieved GPU-accelerated inference using consumer-grade components</li>
+                    <li>Gained practical experience with CUDA, PyTorch, and model deployment</li>
+                    <li>Established a scalable platform for future ML experimentation</li>
+                </ul>
+
+
+                <h2>Future Improvements</h2>
+                <ul>
+                    <li>Develop a custom machine learning library written in C</li>
+                    <li>Implement tensor operations, automatic differentiation, and basic optimizers</li>
+                    <li>Explore low-level GPU programming using CUDA</li>
+                    <li>Reimplement model inference pipelines without Python dependencies</li>
+                    <li>Integrate models with custom C-based runtime environments</li>
+                </ul>
+
+
+                <ul class="actions">
+                    <li><a href="index.html" class="button big">Back to Portfolio</a></li>
+                </ul>
+
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="inner">
+
+            <!-- Menu -->
+            <nav id="menu">
+                <header class="major">
+                    <h2>Menu</h2>
+                </header>
+                <ul>
+                    <li><a href="index.html">Homepage</a></li>
+                    <li><a href="raspberry-pi-project.html">Raspberry Pi Project</a></li>
+                    <li><a href="active-directory-lab.html">Active Directory Lab</a></li>
+                    <li><a href="ml-model-project.html">ML Model Project</a></li>
+                    <li><a href="azure-security-lab.html">Azure Security Lab</a></li>
+                </ul>
+            </nav>
+
+            <!-- Contact -->
+            <section>
+                <header class="major">
+                    <h2>Get in touch</h2>
+                </header>
+                <ul class="contact">
+                    <li class="icon solid fa-envelope"><a href="mailto::elias@tovarfamily.org">elias@tovarfamily.org</a></li>
+                    <li class="icon solid fa-phone">512-517-1775</li>
+                </ul>
+            </section>
+
+            <!-- Footer -->
+            <footer id="footer">
+                <p class="copyright">&copy; Elias Tovar. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+            </footer>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
 
 </body>
 </html>
