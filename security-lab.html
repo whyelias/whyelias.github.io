@@ -1,10 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>On-site Security Lab - Elias Tovar</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="index.html" class="logo"><strong>Back to Portfolio</strong></a>
+                <ul class="icons">
+                    <li><a href="https://www.linkedin.com/in/eliastovar/" class="icon brands fa-linkedin"><span class="label">Twitter</span></a></li>
+                    <li><a href="https://github.com/whyelias" class="icon brands fa-github"><span class="label">Facebook</span></a></li>
+                    <li><a href="https://www.youtube.com/@gravpickle1921" class="icon brands fa-youtube"><span class="label">Snapchat</span></a></li>
+                    <li><a href="https://www.instagram.com/why_eliast/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                </ul>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <header class="main">
+                    <h1>On-site Security Lab</h1>
+                </header>
+
+                <span class="image main"><img src="images/pic02.jpg" alt="" /></span>
+
+                <h2>Project Overview</h2>
+                <p>Configured a Dell Optiplex mini PC to run VMware with 4 virtual machines for security testing and lab environments.</p>
+
+                <hr class="major" />
+
+                <h2>Technologies Used</h2>
+                <ul>
+                    <li>Dell Optiplex mini PC - VMware Workstation Pro</li>
+                    <li>Windows Server 2019 VM - Domain Controller</li>
+                    <li>Windows 10 Pro VM - Client Machine</li>
+                    <li>Kali Linux VM - Security Testing</li>
+                    <li>Kali Linux VM - Security Response</li>
+                </ul>
+
+                <hr class="major" />
+
+                <!-- Implementation Details Section - Replace the existing section in active-directory-lab.html -->
+
+      <section id="overview">
+        <h2>1) Overview</h2>
+        <p><strong>Goal:</strong> Create a compact, repeatable security lab that runs <em>four</em> virtual machines to simulate a real‑time attacker vs. defender scenario. One Kali box is dedicated to offensive operations (red team), and the second Kali box focuses on monitoring/response (blue team). A Windows Server will act as an <abbr title="Active Directory Domain Controller">AD‑DC</abbr>, and a separate Client VM will join the domain to serve as the primary target and endpoint. The environment is reachable remotely over Tailscale.</p>
+        <div class="grid">
+          <div class="kpi"><strong>Host:</strong> Physical mini PC (not domain joined)</div>
+          <div class="kpi"><strong>Hypervisor:</strong> VMware Workstation</div>
+          <div class="kpi"><strong>VMs:</strong> 2× Kali • 1× Win Server • 1× Client</div>
+          <div class="kpi"><strong>Remote:</strong> Tailscale VPN to host only</div>
+        </div>
+      </section>
+
+      <section id="hardware">
+        <h2>2) Lab Hardware &amp; Host Setup</h2>
+        <h3>2.1 Hardware Selection</h3>
+        <ul>
+          <li><strong>Primary host:</strong> Dell OptiPlex mini PC — 6 cores / 12 threads, 16&nbsp;GB RAM, 1&nbsp;TB storage.</li>
+          <li><strong>Not recommended:</strong> Mac mini with 4 cores (insufficient for 4 concurrent VMs under expected load).</li>
+        </ul>
+        <h3>2.2 Host Configuration</h3>
+        <ul>
+          <li>Do <em>not</em> join the host to the on‑site AD domain.</li>
+          <li>Install <strong>Tailscale</strong> on the <em>host only</em> (not inside the guest VMs). Remote into VMs via the host using SSH/RDP/VMware Console.</li>
+          <li>Install <strong>VMware Workstation</strong> to run the four VMs efficiently.</li>
+        </ul>
+        <details>
+          <summary>Why this approach?</summary>
+          <p>Keeping the host off‑domain reduces risk and isolates lab identity. Installing Tailscale only on the host centralizes remote entry and simplifies ACLs while leaving the guest networks stable and predictable.</p>
+        </details>
+      </section>
+
+      <section id="network">
+        <h2>3) Network &amp; Access</h2>
+        <h3>3.1 Topology (Logical)</h3>
+        <ul>
+          <li>VM Network: NAT/Host‑only for lab internal traffic (adjust as needed for specific tests).</li>
+          <li>Remote Access: Tailscale on host; use SSH/RDP to access VMs from authorized devices.</li>
+        </ul>
+        <h3>3.2 Identity Considerations</h3>
+        <ul>
+          <li>Host remains workgroup‑joined (no AD).</li>
+          <li>Windows Server provides AD services solely to the lab network.</li>
+        </ul>
+      </section>
+
+      <section id="vms">
+        <h2>4) Virtual Machines</h2>
+        <h3>4.1 Windows Server (AD‑DC)</h3>
+        <ul>
+          <li>Role: Domain Controller (AD DS).</li>
+          <li>OUs: Create an <em>Users</em> OU (~100 users) and an <em>Admins</em> OU.</li>
+          <li>Password Policy: Randomize ~90% of user passwords; 10% receive assorted, policy‑graded passwords (simple → strong) according to privilege.</li>
+          <li>Admins OU: Add Elias and Eddie with appropriate admin roles.</li>
+        </ul>
+        <h3>4.2 Client</h3>
+        <ul>
+          <li>Purpose: Primary target for pen‑tests.</li>
+          <li>OS: Windows or Ubuntu (join to the domain during setup if Windows; if Ubuntu, integrate with domain where applicable).</li>
+        </ul>
+        <h3>4.3 Kali – Red (Offense)</h3>
+        <ul>
+          <li>Use for discovery, exploitation, credential access, and lateral movement tests.</li>
+        </ul>
+        <h3>4.4 Kali – Blue (Response)</h3>
+        <ul>
+          <li>Use for network/host visibility, log review, and rapid response during red actions.</li>
+        </ul>
+      </section>
+
+      <section id="ad-setup">
+        <h2>5) Active Directory Setup</h2>
+        <h3>5.1 OU &amp; User Provisioning</h3>
+        <ul>
+          <li>Create base OUs: <em>Users</em>, <em>Admins</em>, and optional <em>Workstations</em>.</li>
+          <li>Generate ~100 standard users via PowerShell (see repo link below).</li>
+          <li>Randomize 90% of passwords; log username, password, and time of reset to a secure file.</li>
+          <li>Assign 10% with privileged roles; set graded passwords aligned to role sensitivity.</li>
+        </ul>
+        <h3>5.2 Example: Password Randomization Log Format</h3>
+        <pre><code># Username,Password,ResetTime
+jsmith,5P@u7A1k,2026-01-15T13:37:00Z
+adoe,?L9vB2rr,2026-01-15T13:38:22Z
+...</code></pre>
+        <div class="callout"><strong>Tip:</strong> Store this output in a restricted share or encrypted vault; avoid committing secrets to the repo.</div>
+      </section>
+
+      <section id="client">
+        <h2>6) Client Configuration</h2>
+        <ul>
+          <li>Join the Client to the domain during imaging/first‑boot (or configure SSSD/Kerberos if using Ubuntu).</li>
+          <li>Install baseline tools (EDR/logging if testing, remote admin tools, patching).</li>
+          <li>Harden baseline per role; capture a clean snapshot before exercises.</li>
+        </ul>
+      </section>
+
+      <section id="operations">
+        <h2>7) Attacker ↔ Defender Operations</h2>
+        <h3>7.1 Example Scenarios</h3>
+        <ul>
+          <li>Recon → Phishing simulation → Initial access on Client → Privilege escalation → DC credential exposure attempt.</li>
+          <li>Lateral movement tests from Client to Server, measuring detection and response speed.</li>
+        </ul>
+        <h3>7.2 Blue Team Tasks</h3>
+        <ul>
+          <li>Establish logging (Windows Event Forwarding, Sysmon), periodic log reviews, and incident notes.</li>
+          <li>Document Indicators of Compromise (IOCs) and lessons learned per run.</li>
+        </ul>
+      </section>
+
+      <section id="implementation">
+        <h2>8) Implementation Plan</h2>
+        <ol>
+          <li><strong>Repo &amp; Storage:</strong> Create/organize GitHub repo for scripts and docs.</li>
+          <li><strong>Host Prep:</strong> Add NVMe if needed, install Ubuntu (or preferred host OS), VMware Workstation, and Tailscale (host only).</li>
+          <li><strong>VM Builds:</strong> Provision Windows Server, Client, and two Kali VMs. Snapshot clean states.</li>
+          <li><strong>AD Provisioning:</strong> Create OUs, generate users, set randomized passwords, create Admins OU entries for Elias &amp; Eddie.</li>
+          <li><strong>Access &amp; Tests:</strong> Verify remote access via Tailscale; run initial red/blue dry‑run.</li>
+        </ol>
+      </section>
+
+                <ul class="actions">
+                    <li><a href="index.html" class="button big">Back to Portfolio</a></li>
+                </ul>
+
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="inner">
+
+            <!-- Menu -->
+            <nav id="menu">
+                <header class="major">
+                    <h2>Menu</h2>
+                </header>
+                <ul>
+                    <li><a href="index.html">Homepage</a></li>
+                    <li><a href="raspberry-pi-project.html">Raspberry Pi Project</a></li>
+                    <li><a href="active-directory-lab.html">Active Directory Lab</a></li>
+                    <li><a href="ml-model-project.html">ML Model Project</a></li>
+                    <li><a href="security-lab.html">Azure Security Lab</a></li>
+                </ul>
+            </nav>
+
+            <!-- Contact -->
+            <section>
+                <header class="major">
+                    <h2>Get in touch</h2>
+                </header>
+                <ul class="contact">
+                    <li class="icon solid fa-envelope"><a href="mailto::elias@tovarfamily.org">elias@tovarfamily.org</a></li>
+                    <li class="icon solid fa-phone">512-517-1775</li>
+                </ul>
+            </section>
+
+            <!-- Footer -->
+            <footer id="footer">
+                <p class="copyright">&copy; Elias Tovar. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+            </footer>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
 
 </body>
 </html>
